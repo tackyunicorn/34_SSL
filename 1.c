@@ -57,12 +57,10 @@ void fcfs()
 		wt += WT[i+1];
 	}
 
-	TA[1] = BT[1];
-	ta = BT[1];
-	for(i=1 ; i<n ; i++)
+	for(i=1 ; i<=n ; i++)
 	{
-		TA[i+1] = TA[i] + BT[i+1];
-		ta += TA[i+1];
+		TA[i] = BT[i] + WT[i];
+		ta += TA[i];
 	}
 
 	wt /= n;
@@ -114,12 +112,10 @@ void sjf()
                 wt += WT[i+1];
         }
 
-        TA[1] = BT_order[1];
-        ta = BT_order[1];
-        for(i=1 ; i<n ; i++)
+        for(i=1 ; i<=n ; i++)
         {
-                TA[i+1] = TA[i] + BT_order[i+1];
-                ta += TA[i+1];
+                TA[i] = BT_order[i] + WT[i];
+                ta += TA[i];
         }
 
         wt /= n;
@@ -195,12 +191,10 @@ void priority()
                 wt += WT[i+1];
         }
 
-	TA[1] = BT_order[1];
-        ta = BT_order[1];
-        for(i=1 ; i<n ; i++)
+        for(i=1 ; i<=n ; i++)
         {
-                TA[i+1] = TA[i] + BT_order[i+1];
-                ta += TA[i+1];
+                TA[i] = BT_order[i] + WT[i];
+                ta += TA[i];
         }
 
         wt /= n;
