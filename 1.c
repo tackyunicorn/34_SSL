@@ -218,4 +218,69 @@ void priority()
 
 void rr()
 {
+	int tq , RT[10] , remain , t=0 , flag=0;
+	printf("\nEnter the number of processes: ");
+        scanf("%d" , &n);
+	remain=n;
+        printf("\nEnter the Burst times: \n");
+        for(i=1 ; i<=n ; i++)
+        {
+                printf("BT[%d] = " , i);
+                scanf("%d" , &BT[i]);
+		RT[i] = BT[i];
+        }
+	printf("\nEnter the Arrival times: \n");
+        for(i=1 ; i<=n ; i++)
+        {
+                printf("BT[%d] = " , i);
+                scanf("%d" , &AT[i]);
+        }
+	printf("\nEnter the time quantum: ");
+	scanf("%d" , &tq);
+
+	wt = 0;
+	ta = 0;
+
+	i=1;
+	while(remain != 0)
+	{
+		if(RT[i] <= tq && RT[i]>0)
+		{
+			t += RT[i];
+			RT[i] = 0;
+			flag = 1;
+		}
+		else if(RT[i] > 0)
+		{
+			RT[i] -= tq;
+			t += tq;
+		}
+		if(RT[i] == 0 && flag==1)
+		{
+			--remain;
+			WT[i] = t - AT[i] - BT[i];
+			wt += WT[i];
+			TA[i] = t - AT[i];
+			ta += TA[i];
+			flag = 0;
+		}
+		if(i == n)
+			i=1;
+		else if(AT[i+1] <= t)
+			i++;
+		else
+			i=1;
+	}
+
+	wt /= n;
+        ta /= n;
+
+        printf ("\nThe waiting and turnaround times of all processes are: \n");
+        printf("PNO:\tAT\tBT\tWT\tTA\n");
+        for(i=1 ; i<=n ; i++)
+        {
+		printf("P%d\t%d\t%d\t%d\t%d\n" , i , AT[i] , BT[i] , WT[i] , TA[i]);
+        }
+        printf("\nThe avg. waiting time is: %f\n" , wt);
+        printf("\nThe avg. turnaround time is: %f\n" , ta);
 }
