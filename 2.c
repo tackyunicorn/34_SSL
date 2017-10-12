@@ -3,9 +3,19 @@
 #include<string.h>
 #define clear() printf("\033[H\033[J")
 
+char fname[100][10] , temp[10];
+int dir[100] , type[100] , ptr=1 , fcnt , dcnt=0;
+
 void sld();
 void tld();
+void hldsc();
 void hld();
+void inorder(int);
+void display();
+void del();
+void dcreate(int);
+void create();
+int traverse(char []);
 
 void main()
 {
@@ -327,7 +337,7 @@ void tld()
         }while(cont == 1);
 }
 
-void hld()
+void hldsc()
 {
 	clear();
         int cont,c,i;
@@ -396,3 +406,136 @@ void hld()
         }while(cont == 1);
 }
 
+void hld()
+{
+	clear();
+        int cont , c;
+        do
+        {
+                printf("\n\nHIERARCHICAL FILE ORGANIZATION\n\n");
+                printf("1. Create File/Directory\n2. Delete File/Directory\n3. Display Files\n4. Main Menu\n\nEnter an option: ");
+                scanf("%d",&c);
+                switch(c)
+                {
+                        case 1: create();
+                                break;
+                        case 2: del();
+                                break;
+                        case 3: display();
+                                break;
+                        case 4: main();
+                                break;
+                        default:printf("\nWRONG OPTION!\n");
+                }
+                printf("\nDO YOU WANT TO CONTINUE? (1 FOR YES): ");
+                scanf("%d" , &cont);
+        }while(cont==1);
+}
+
+void inorder(int tempptr)
+{
+        if(type[tempptr]==1 || type[tempptr]==2)
+        {
+                inorder(2*tempptr);
+                printf("%s\t",fname[tempptr]);
+                inorder(2*tempptr+1);
+        }
+}
+
+void display()
+{
+        int tempptr=1;
+        inorder(tempptr);
+        printf("\n");
+}
+
+int traverse(char temp[10])
+{
+        int i;
+        for(i=1 ; i<100 ; i++)
+        {
+                if(strcmp(temp,fname[i]) == 0)
+                {
+                        ptr=i;
+                        return ptr;
+                }
+        }
+        return 0;
+}
+
+void del()
+{
+        printf("\nEnter the name of the file/dir to be deleted: ");
+        scanf("%s" , temp);
+        ptr=traverse(temp);
+        if(ptr == 0)
+        {
+                printf("\nThe file/dir was not found!\n");
+        }
+        else
+        {
+                type[ptr]=0;
+                memset(fname[ptr], 0, 10);
+        }
+}
+
+void dcreate(int o)
+{
+        if(o == 1)
+        {
+                printf("\nEnter the file name: ");
+                scanf("%s" , fname[ptr]);
+                type[ptr]=1;
+                fcnt++;
+        }
+        else
+        {
+                printf("\nEnter the directory name: ");
+                scanf("%s" , fname[ptr]);
+                type[ptr]=2;
+                dcnt++;
+        }
+
+}
+
+void create()
+{
+        int o;
+        printf("\nEnter the type to create\n1. File\n2. Directory\n\nEnter an option: ");
+        scanf("%d" , &o);
+        if(dcnt==0)
+        {
+                printf("\nEnter the root directory name: ");
+                scanf("%s" , fname[1]);
+                type[1] = 2;
+                dcnt++;
+        }
+        else
+        {
+                printf("\nEnter the parent directory name: ");
+                scanf("%s" , temp);
+                ptr = traverse(temp);
+                if(ptr == 0)
+                {
+                        printf("\nThe directory was not found!\n");
+                }
+                else if(type[ptr] != 2)
+                {
+                        printf("\nNot a directory!\n");
+                }
+                else if(type[2*ptr] < 1)
+                {
+                        ptr = 2*ptr;
+                        dcreate(o);
+                }
+                else if(type[2*ptr+1] < 1)
+                {
+                        ptr = 2*ptr+1;
+                        dcreate(o);
+                }
+		 else
+                {
+                        printf("\nRequested directory is full!\n");
+                }
+        }
+}
